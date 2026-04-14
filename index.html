@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عرض أتعاب قانونية | أرجوان للمحاماة والاستشارات</title>
+    
+    <!-- الأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- خط Cairo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- مكتبة معالجة البيانات (Excel) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: { 
+                            900: '#0d131c', 
+                            800: '#151d29', 
+                            700: '#212f42',
+                            main: '#354A69', 
+                            light: '#4d6991' 
+                        },
+                        gold: { 
+                            light: '#E6D5B8',
+                            main: '#A49379', 
+                            dark: '#7A6A47'  
+                        }
+                    },
+                    fontFamily: { 
+                        // تم تحديد خط Cairo كخط أساسي لكافة عناصر العرض
+                        sans: ['Cairo', 'sans-serif'], 
+                        heading: ['Cairo', 'sans-serif'] 
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* إزالة خط الجزيرة */
+        body {
+            background-color: #0d131c;
+            color: #ffffff;
+            font-family: 'Cairo', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* حاوية الشريحة مع تدرج لوني عميق */
+        .slide {
+            width: 1280px;
+            height: 720px;
+            background: linear-gradient(135deg, #0d131c 0%, #151d29 50%, #212f42 100%);
+            position: relative;
+            margin: 40px auto;
+            overflow: hidden;
+            border: 1px solid rgba(164, 147, 121, 0.2);
+            display: flex;
+            flex-direction: column;
+            padding: 60px 100px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+            border-radius: 8px;
+        }
+
+        /* تدرجات ذهبية للنصوص والخلفيات */
+        .text-gradient-gold {
+            background: linear-gradient(135deg, #E6D5B8 0%, #A49379 40%, #7A6A47 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+        .bg-gradient-gold {
+            background: linear-gradient(135deg, #E6D5B8 0%, #A49379 50%, #7A6A47 100%);
+        }
+
+        /* هالة إضاءة خلفية خفيفة جداً للعمق */
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(164, 147, 121, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* الزخرفة الهندسية */
+        .classic-pattern {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(rgba(164, 147, 121, 0.06) 1px, transparent 1px);
+            background-size: 35px 35px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* إطار زخرفي */
+        .border-ornament {
+            position: absolute;
+            top: 24px; bottom: 24px; left: 24px; right: 24px;
+            border: 1px solid rgba(164, 147, 121, 0.15);
+            pointer-events: none;
+            z-index: 1;
+        }
+        .border-ornament::before, .border-ornament::after {
+            content: ''; position: absolute; width: 10px; height: 10px; border: 1px solid #A49379;
+        }
+        .border-ornament::before { top: -5px; left: -5px; background: #0d131c; }
+        .border-ornament::after { bottom: -5px; right: -5px; background: #0d131c; }
+
+        /* الجداول */
+        .glass-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 12px;
+        }
+        .glass-table thead th {
+            color: #E6D5B8;
+            font-weight: bold;
+            padding: 16px 25px;
+            background: linear-gradient(90deg, rgba(164, 147, 121, 0.1) 0%, transparent 100%);
+            border-bottom: 2px solid #A49379;
+            font-size: 16px;
+        }
+        .glass-table tbody tr {
+            background: linear-gradient(90deg, rgba(53, 74, 105, 0.4) 0%, rgba(21, 29, 41, 0.4) 100%);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        .glass-table tbody tr:hover {
+            transform: translateX(-5px);
+            background: linear-gradient(90deg, rgba(53, 74, 105, 0.6) 0%, rgba(21, 29, 41, 0.6) 100%);
+            border-right-color: #E6D5B8;
+        }
+        .glass-table td {
+            padding: 22px 25px;
+        }
+        .glass-table td:first-child { 
+            border-right: 4px solid #A49379; 
+            border-radius: 0 8px 8px 0;
+            transition: all 0.3s ease;
+        }
+        .glass-table td:last-child { 
+            border-radius: 8px 0 0 8px;
+        }
+
+        /* أزرار التحكم */
+        .bottom-trigger-zone { position: fixed; bottom: 0; left: 0; width: 100%; height: 100px; z-index: 9998; }
+        #controls {
+            position: fixed; bottom: -80px; left: 50%; transform: translateX(-50%); z-index: 9999;
+            background: rgba(13, 19, 28, 0.95); backdrop-filter: blur(15px);
+            padding: 12px 30px; border-radius: 50px; border: 1px solid #A49379;
+            display: flex; gap: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .bottom-trigger-zone:hover + #controls, #controls:hover { bottom: 30px; opacity: 1; visibility: visible; }
+        .btn-control {
+            padding: 10px 24px; border-radius: 25px; font-weight: bold; display: flex;
+            align-items: center; gap: 10px; color: white; font-size: 14px; cursor: pointer; transition: all 0.3s ease;
+        }
+        .btn-excel { background: linear-gradient(135deg, #1f6e43, #144d2e); border: 1px solid #2ecc71; }
+        .btn-upload { background: linear-gradient(135deg, #354A69, #212f42); border: 1px solid #A49379; }
+        .btn-control:hover { filter: brightness(1.2); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+
+        .bank-logo { max-height: 50px; object-fit: contain; filter: brightness(0) invert(1) opacity(0.8); }
+
+        /* الطباعة والتصدير لـ PDF */
+        @media print {
+            @page { size: 1280px 720px; margin: 0; }
+            html, body { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; background-color: #0d131c !important; margin: 0 !important; padding: 0 !important; }
+            .no-print, .bottom-trigger-zone { display: none !important; }
+            .slide {
+                width: 1280px !important; height: 720px !important; margin: 0 !important; border: none !important; 
+                box-shadow: none !important; page-break-inside: avoid !important; page-break-after: always !important; 
+                background: linear-gradient(135deg, #0d131c 0%, #151d29 50%, #212f42 100%) !important;
+            }
+            .text-gradient-gold { background: none; color: #A49379 !important; -webkit-text-fill-color: #A49379 !important; }
+            .glow-orb { display: none !important; }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="bottom-trigger-zone"></div>
+    <div id="controls" class="no-print">
+        <button onclick="downloadExcelTemplate()" class="btn-control btn-excel">
+            <i class="fa-solid fa-file-excel"></i> تحميل قالب الإكسيل
+        </button>
+        <button onclick="document.getElementById('fileInput').click()" class="btn-control btn-upload">
+            <i class="fa-solid fa-sync"></i> تحديث بيانات العرض
+        </button>
+        <input type="file" id="fileInput" class="hidden" accept=".xlsx, .xls" onchange="handleFileUpload(event)">
+    </div>
+
+    <div id="capture-area">
+
+        <!-- ================= الشريحة 1: الغلاف ================= -->
+        <div class="slide flex flex-col justify-center items-center text-center">
+            <div class="classic-pattern"></div>
+            <div class="border-ornament"></div>
+            <div class="glow-orb w-[600px] h-[600px] top-[-100px] right-[-100px]"></div>
+            
+            <div class="relative z-10 w-full px-10">
+                <!-- الشعار الجديد -->
+                <div class="mb-12">
+                    <img id="main-logo" src="https://www.image2url.com/r2/default/images/1776159540055-5d9d1d0a-1025-4b61-8274-aec09a5a6a0c.png" 
+                         alt="شعار أرجوان للمحاماة" crossorigin="anonymous" class="w-80 mx-auto drop-shadow-[0_10px_25px_rgba(255,255,255,0.15)]">
+                </div>
+                
+                <p class="text-gradient-gold text-sm font-bold mb-6 uppercase tracking-[0.6em]" id="sub-title">Legal Consultations & Advocacy</p>
+                <div class="w-32 h-[2px] bg-gradient-gold mx-auto mb-10 rounded-full"></div>
+                
+                <h1 class="text-7xl font-bold font-heading mb-16 text-white drop-shadow-lg" id="main-title">عرض أتعاب قانونية</h1>
+                
+                <div class="flex justify-center items-center gap-24 pt-8 mt-8 w-3/4 mx-auto bg-gradient-to-r from-transparent via-navy-800/80 to-transparent p-8 rounded-2xl backdrop-blur-sm border-t border-b border-gold-main/20">
+                    <div class="text-right flex-1">
+                        <p class="text-gold-light text-xs uppercase font-bold mb-3 tracking-widest"><i class="fa-solid fa-user-tie ml-2 opacity-70"></i>العميل المكرم</p>
+                        <p class="text-3xl font-bold text-white" id="client-name">شركة الأفق للتجارة والمقاولات</p>
+                    </div>
+                    <div class="w-[2px] h-16 bg-gradient-to-b from-transparent via-gold-main to-transparent"></div>
+                    <div class="text-right flex-1">
+                        <p class="text-gold-light text-xs uppercase font-bold mb-3 tracking-widest"><i class="fa-solid fa-calendar-alt ml-2 opacity-70"></i>تاريخ العرض</p>
+                        <p class="text-3xl font-bold text-white" id="proposal-date">15 مايو 2026</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= الشريحة 2: الرؤية والنهج (تم دمج الشكل الجانبي والبطاقات) ================= -->
+        <div class="slide">
+            <div class="classic-pattern"></div>
+            <div class="border-ornament"></div>
+            <div class="glow-orb w-[800px] h-[800px] bottom-[-200px] left-[-200px] opacity-40"></div>
+
+            <div class="grid grid-cols-12 gap-12 items-center h-full relative z-10">
+                
+                <!-- القسم الأيمن: النص + البطاقات -->
+                <div class="col-span-7 flex flex-col justify-center h-full">
+                    <div class="mb-8">
+                        <div class="flex items-center gap-4 mb-4">
+                            <i class="fa-solid fa-scale-balanced text-gold-main text-lg"></i>
+                            <span class="text-gradient-gold font-bold text-sm uppercase tracking-[0.2em]">Our Legal Approach</span>
+                        </div>
+                        <h2 class="text-5xl font-bold text-white leading-tight mb-6">النهج <span class="text-gradient-gold">القانوني</span></h2>
+                        <p class="text-xl text-gray-300 leading-relaxed font-light border-r-4 border-gold-main pr-5 bg-gradient-to-l from-navy-800/50 to-transparent p-4 rounded-l-xl" id="vision-text">
+                            نلتزم في مكتبنا بتقديم حماية قانونية شاملة وحلول استراتيجية مبنية على الفهم العميق للأنظمة، لضمان سير أعمالكم بثقة وأمان، والدفاع عن حقوقكم ومكتسباتكم بأعلى درجات الاحترافية والسرية التامة.
+                        </p>
+                    </div>
+                    
+                    <!-- البطاقات الثلاثة (مدمجة هنا) -->
+                    <div class="grid grid-cols-2 gap-5">
+                        <div class="p-5 border border-gold-main/20 bg-gradient-to-br from-navy-800 to-navy-900 rounded-2xl flex items-start gap-4 shadow-lg">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-navy-main to-navy-700 flex items-center justify-center shrink-0 border border-gold-main/30">
+                                <i class="fa-solid fa-shield-halved text-gold-light text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-lg mb-1">حماية وقائية</h4>
+                                <p class="text-gray-400 text-sm leading-snug">صياغة وتدقيق العقود لتجنب النزاعات المستقبلية وسد الثغرات.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="p-5 border border-gold-main/20 bg-gradient-to-br from-navy-800 to-navy-900 rounded-2xl flex items-start gap-4 shadow-lg">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-navy-main to-navy-700 flex items-center justify-center shrink-0 border border-gold-main/30">
+                                <i class="fa-solid fa-gavel text-gold-light text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-lg mb-1">تمثيل رصين</h4>
+                                <p class="text-gray-400 text-sm leading-snug">ترافع واحترافية عالية وتمثيل قانوني أمام كافة الدرجات.</p>
+                            </div>
+                        </div>
+
+                        <div class="col-span-2 p-5 border border-gold-main/20 bg-gradient-to-br from-navy-800 to-navy-900 rounded-2xl flex items-center gap-4 shadow-lg">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-navy-main to-navy-700 flex items-center justify-center shrink-0 border border-gold-main/30">
+                                <i class="fa-solid fa-chess-knight text-gold-light text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-lg mb-1">استراتيجيات ذكية</h4>
+                                <p class="text-gray-400 text-sm leading-snug">تقديم استشارات استباقية وخطط قانونية مدروسة بعناية لضمان نمو آمن ومستدام لمشاريعكم.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- القسم الأيسر: الشكل الجانبي (الميزان الزجاجي) -->
+                <div class="col-span-5 flex justify-center items-center relative h-full">
+                    <div class="relative w-full h-[550px] border-2 border-gold-main/20 rounded-t-full flex flex-col items-center justify-center bg-gradient-to-b from-navy-main/20 to-transparent p-8 overflow-hidden shadow-[inset_0_20px_50px_rgba(0,0,0,0.5)]">
+                        <div class="absolute top-10 w-3/4 h-[2px] bg-gradient-to-r from-transparent via-gold-main to-transparent"></div>
+                        <div class="w-48 h-48 rounded-full bg-navy-800/80 border border-gold-main/40 flex justify-center items-center mb-8 shadow-[0_0_30px_rgba(164,147,121,0.2)]">
+                            <i class="fa-solid fa-scale-balanced text-7xl text-gradient-gold"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white text-center tracking-wide">العدالة <span class="text-gold-main/50 px-2">•</span> الثقة <span class="text-gold-main/50 px-2">•</span> الاحترافية</h3>
+                        <div class="absolute bottom-0 w-full h-1/3 bg-gradient-to-t from-navy-900 to-transparent"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ================= الشريحة 3: تفاصيل الأتعاب (الجدول) ================= -->
+        <div class="slide">
+            <div class="classic-pattern"></div>
+            <div class="mb-10 relative z-10 flex justify-between items-end border-b pb-6 border-gold-main/30">
+                <div>
+                    <h2 class="text-5xl font-bold text-white">تفاصيل <span class="text-gradient-gold">الأتعاب والخدمات</span></h2>
+                </div>
+                <div class="text-left bg-navy-800/80 px-6 py-2 rounded-full border border-gold-main/20">
+                    <p class="text-sm text-gold-light font-bold tracking-wider">العملة: الريال السعودي (SAR)</p>
+                </div>
+            </div>
+            
+            <div class="flex-grow overflow-hidden relative z-10">
+                <table class="glass-table">
+                    <thead>
+                        <tr>
+                            <th class="text-right w-1/4">البند القانوني</th>
+                            <th class="text-right w-1/2">نطاق العمل والتفاصيل</th>
+                            <th class="text-left w-1/4">قيمة الأتعاب</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <tr>
+                            <td class="font-bold text-white text-xl">صياغة العقود</td>
+                            <td class="text-gray-300 leading-relaxed">صياغة عدد (3) عقود تجارية وتأسيسية ومراجعتها لضمان خلوها من الثغرات القانونية.</td>
+                            <td class="text-left font-bold text-gold-light text-3xl">15,000</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold text-white text-xl">الاستشارات القانونية</td>
+                            <td class="text-gray-300 leading-relaxed">باقة استشارات شهرية مفتوحة (شفهية وكتابية) لمدة 6 أشهر في قضايا العمل والشركات.</td>
+                            <td class="text-left font-bold text-gold-light text-3xl">30,000</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold text-white text-xl">التمثيل القضائي</td>
+                            <td class="text-gray-300 leading-relaxed">دراسة وتمثيل الشركة في الدعوى التجارية المقامة ضد المورد بمحكمة الدرجة الأولى.</td>
+                            <td class="text-left font-bold text-gold-light text-3xl">45,000</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold text-white text-xl">اللوائح العمالية</td>
+                            <td class="text-gray-300 leading-relaxed">إعداد واعتماد لائحة تنظيم العمل الداخلية وفقاً لمتطلبات وزارة الموارد البشرية.</td>
+                            <td class="text-left font-bold text-gold-light text-3xl">8,000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ================= الشريحة 4: ملخص الأتعاب المالية ================= -->
+        <div class="slide justify-center items-center text-center">
+            <div class="classic-pattern"></div>
+            <div class="border-ornament"></div>
+            <div class="glow-orb w-[600px] h-[600px] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
+
+            <div class="relative z-10 w-full max-w-5xl">
+                <div class="flex items-center justify-center mb-8 gap-4">
+                    <i class="fa-solid fa-file-invoice-dollar text-3xl text-gold-main"></i>
+                    <h2 class="text-4xl font-bold text-white">الملخص المالي</h2>
+                </div>
+                
+                <div class="bg-gradient-to-br from-navy-800 to-navy-900 border border-gold-main/30 p-16 rounded-[40px] shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden">
+                    <i class="fa-solid fa-stamp absolute -left-10 -bottom-10 text-[20rem] text-navy-700/30 rotate-12"></i>
+
+                    <div class="flex items-center justify-center gap-16 relative z-10">
+                        <div class="opacity-60 transform scale-90">
+                            <p class="text-xl text-gray-300 mb-2 font-bold">الإجمالي قبل الخصم</p>
+                            <p class="text-5xl font-bold line-through decoration-red-500/60 decoration-4" id="original-total">98,000</p>
+                        </div>
+                        
+                        <div class="w-[2px] h-32 bg-gradient-to-b from-transparent via-gold-main to-transparent"></div>
+                        
+                        <div class="text-center">
+                            <p class="text-gold-light text-xl font-bold mb-4 uppercase tracking-widest bg-navy-900/50 inline-block px-4 py-1 rounded-full border border-gold-main/20">إجمالي الأتعاب المعتمدة</p>
+                            <div class="flex items-baseline justify-center gap-3 mt-4">
+                                <span class="text-3xl text-gradient-gold font-bold">SAR</span>
+                                <span class="text-8xl font-black text-white leading-none tracking-tight drop-shadow-[0_5px_15px_rgba(164,147,121,0.3)]" id="net-total">85,000</span>
+                            </div>
+                            <p class="text-lg text-gray-400 mt-6">*المبلغ لا يشمل ضريبة القيمة المضافة ورسوم المحاكم.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-12 inline-flex items-center gap-4 px-10 py-4 bg-gradient-gold text-navy-900 font-bold rounded-full text-xl shadow-[0_10px_30px_rgba(164,147,121,0.2)] hover:scale-105 transition-transform" id="savings-box">
+                    <i class="fa-solid fa-handshake text-2xl"></i>
+                    <span>تم تطبيق خصم خاص للعميل بقيمة: 13,000 ريال</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= الشريحة 5: البيانات البنكية ================= -->
+        <div class="slide">
+            <div class="classic-pattern"></div>
+            
+            <div class="mb-14 text-center relative z-10 mt-6">
+                <h2 class="text-5xl font-bold text-white">الحسابات <span class="text-gradient-gold">البنكية المعتمدة</span></h2>
+                <p class="text-gray-400 mt-4 text-xl">نرجو تزويدنا بإيصال التحويل فور إتمامه للبدء في الإجراءات القانونية.</p>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-10 flex-grow relative z-10 px-10">
+                <div class="border border-gold-main/30 p-10 rounded-3xl bg-gradient-to-br from-navy-800 to-navy-900 shadow-2xl relative overflow-hidden group hover:border-gold-main/80 transition-colors">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-gold-main/10 to-transparent rounded-bl-full"></div>
+                    <div class="flex justify-between items-center mb-10 border-b border-gold-main/20 pb-6">
+                        <span class="text-xl font-bold text-white">البنك الأهلي السعودي</span>
+                        <img id="snb-logo" src="https://upload.wikimedia.org/wikipedia/commons/6/62/Saudi_National_Bank_Logo.svg" alt="SNB" class="bank-logo">
+                    </div>
+                    <div class="space-y-8">
+                        <div>
+                            <p class="text-gold-light text-sm mb-2 font-bold uppercase tracking-wide">رقم الحساب (Account No)</p>
+                            <p class="text-3xl text-white tracking-widest bg-navy-900/50 p-3 rounded-lg border border-gold-main/10" id="bank1-acc">1000 2345 6789 01</p>
+                        </div>
+                        <div>
+                            <p class="text-gold-light text-sm mb-2 font-bold uppercase tracking-wide">رقم الآيبان (IBAN)</p>
+                            <p class="text-2xl text-gradient-gold tracking-wider" id="bank1-iban">SA14 1000 0010 0023 4567 8901</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border border-gold-main/30 p-10 rounded-3xl bg-gradient-to-br from-navy-800 to-navy-900 shadow-2xl relative overflow-hidden group hover:border-gold-main/80 transition-colors">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-gold-main/10 to-transparent rounded-bl-full"></div>
+                    <div class="flex justify-between items-center mb-10 border-b border-gold-main/20 pb-6">
+                        <span class="text-xl font-bold text-white">مصرف الراجحي</span>
+                        <img id="rajhi-logo" src="https://upload.wikimedia.org/wikipedia/commons/f/f1/Al_Rajhi_Bank_Logo.svg" alt="Rajhi" class="bank-logo">
+                    </div>
+                    <div class="space-y-8">
+                        <div>
+                            <p class="text-gold-light text-sm mb-2 font-bold uppercase tracking-wide">رقم الحساب (Account No)</p>
+                            <p class="text-3xl text-white tracking-widest bg-navy-900/50 p-3 rounded-lg border border-gold-main/10" id="bank2-acc">4000 5555 6666 77</p>
+                        </div>
+                        <div>
+                            <p class="text-gold-light text-sm mb-2 font-bold uppercase tracking-wide">رقم الآيبان (IBAN)</p>
+                            <p class="text-2xl text-gradient-gold tracking-wider" id="bank2-iban">SA90 8000 0040 0055 5566 6677</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= الشريحة 6: الختام والتواصل ================= -->
+        <div class="slide flex flex-col justify-center items-center text-center relative">
+            <div class="classic-pattern"></div>
+            <div class="border-ornament"></div>
+            <div class="glow-orb w-[800px] h-[800px] top-0 left-1/2 transform -translate-x-1/2 opacity-50"></div>
+            
+            <div class="relative z-10 w-full">
+                <div class="w-24 h-24 mx-auto border border-gold-main rounded-full flex items-center justify-center mb-8 bg-gradient-to-b from-navy-main/30 to-navy-900/50 shadow-[0_0_30px_rgba(164,147,121,0.2)]">
+                    <i class="fa-solid fa-signature text-5xl text-gradient-gold"></i>
+                </div>
+                
+                <h2 class="text-5xl font-bold mb-6 text-white leading-tight">شراكة قانونية <br><span class="text-gradient-gold">تحمي مصالحك وتضمن حقوقك</span></h2>
+                
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed mb-12 font-light italic">
+                    "نعتز بثقتكم بنا، ونتعهد ببذل العناية اللازمة وتسخير كافة خبراتنا القانونية لتحقيق تطلعاتكم وحماية كيانكم الموقر."
+                </p>
+                
+                <div class="grid grid-cols-2 gap-6 w-full max-w-5xl mx-auto pt-8 border-t border-gold-main/20">
+                    <!-- الجوال / واتساب -->
+                    <div class="flex items-center gap-5 bg-gradient-to-r from-navy-800 to-navy-900 p-5 rounded-2xl border border-gold-main/10 shadow-lg hover:border-gold-main/40 transition-colors">
+                        <div class="w-14 h-14 rounded-full bg-gradient-gold flex items-center justify-center text-navy-900 shrink-0">
+                            <i class="fa-brands fa-whatsapp text-3xl"></i>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-gold-light text-xs font-bold mb-1 tracking-widest uppercase">الجوال / واتساب</p>
+                            <p class="text-2xl font-bold text-white font-sans" id="contact-phone">0568450107</p>
+                        </div>
+                    </div>
+
+                    <!-- الإيميل -->
+                    <div class="flex items-center gap-5 bg-gradient-to-r from-navy-800 to-navy-900 p-5 rounded-2xl border border-gold-main/10 shadow-lg hover:border-gold-main/40 transition-colors">
+                        <div class="w-14 h-14 rounded-full bg-gradient-gold flex items-center justify-center text-navy-900 shrink-0">
+                            <i class="fa-solid fa-envelope text-2xl"></i>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-gold-light text-xs font-bold mb-1 tracking-widest uppercase">البريد الإلكتروني</p>
+                            <p class="text-2xl font-bold text-white font-sans" id="contact-email">info@orjwanlaw.com</p>
+                        </div>
+                    </div>
+
+                    <!-- الموقع الإلكتروني -->
+                    <div class="flex items-center gap-5 bg-gradient-to-r from-navy-800 to-navy-900 p-5 rounded-2xl border border-gold-main/10 shadow-lg hover:border-gold-main/40 transition-colors">
+                        <div class="w-14 h-14 rounded-full bg-gradient-gold flex items-center justify-center text-navy-900 shrink-0">
+                            <i class="fa-solid fa-globe text-2xl"></i>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-gold-light text-xs font-bold mb-1 tracking-widest uppercase">الموقع الإلكتروني</p>
+                            <p class="text-2xl font-bold text-white font-sans" id="contact-web">www.orjwanlaw.com</p>
+                        </div>
+                    </div>
+
+                    <!-- العنوان -->
+                    <div class="flex items-center gap-5 bg-gradient-to-r from-navy-800 to-navy-900 p-5 rounded-2xl border border-gold-main/10 shadow-lg hover:border-gold-main/40 transition-colors">
+                        <div class="w-14 h-14 rounded-full bg-gradient-gold flex items-center justify-center text-navy-900 shrink-0">
+                            <i class="fa-solid fa-location-dot text-2xl"></i>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-gold-light text-xs font-bold mb-1 tracking-widest uppercase">المقر الرئيسي</p>
+                            <p class="text-base font-bold text-white font-sans leading-snug" id="contact-location">مكة المكرمة - العوالي - شارع ابراهيم الجفالي الدور 2 مكتب 13</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ================= البرمجة الخاصة بالإكسيل ================= -->
+    <script>
+        async function fetchImageAsBase64(url, imgElementId) {
+            try {
+                const response = await fetch(url);
+                const blob = await response.blob();
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    document.getElementById(imgElementId).src = reader.result;
+                };
+                reader.readAsDataURL(blob);
+            } catch (error) {
+                console.log('ملاحظة: تعذر تحميل الصورة كـ Base64', error);
+            }
+        }
+
+        window.addEventListener('load', function() {
+            fetchImageAsBase64('https://upload.wikimedia.org/wikipedia/commons/6/62/Saudi_National_Bank_Logo.svg', 'snb-logo');
+            fetchImageAsBase64('https://upload.wikimedia.org/wikipedia/commons/f/f1/Al_Rajhi_Bank_Logo.svg', 'rajhi-logo');
+        });
+
+        // 1. إنشاء وتحميل قالب الإكسيل 
+        function downloadExcelTemplate() {
+            const wb = XLSX.utils.book_new();
+
+            const generalData = [
+                ["معرّف الحقل", "القيمة", "الوصف (لا تقم بتعديله)"],
+                ["main-title", "عرض أتعاب قانونية", "عنوان العرض الرئيسي"],
+                ["sub-title", "Legal Consultations & Advocacy", "العنوان الفرعي / التخصص"],
+                ["client-name", "شركة الأفق للتجارة والمقاولات", "اسم العميل / الموكل"],
+                ["proposal-date", "15 مايو 2026", "تاريخ العرض"],
+                ["vision-text", "نلتزم في مكتبنا بتقديم حماية قانونية شاملة وحلول استراتيجية مبنية على الفهم العميق للأنظمة، لضمان سير أعمالكم بثقة وأمان، والدفاع عن حقوقكم ومكتسباتكم بأعلى درجات الاحترافية والسرية التامة.", "نص الرؤية أو رسالة المكتب"],
+                ["original-total", "98,000", "السعر قبل الخصم (اختياري)"],
+                ["net-total", "85,000", "إجمالي الأتعاب النهائي"],
+                ["savings-val", "13,000", "مبلغ الخصم أو التوفير الممنوح"],
+                ["bank1-acc", "1000 2345 6789 01", "رقم حساب البنك الأهلي"],
+                ["bank1-iban", "SA14 1000 0010 0023 4567 8901", "آيبان البنك الأهلي"],
+                ["bank2-acc", "4000 5555 6666 77", "رقم حساب الراجحي"],
+                ["bank2-iban", "SA90 8000 0040 0055 5566 6677", "آيبان الراجحي"],
+                ["contact-phone", "0568450107", "رقم الجوال / واتساب"],
+                ["contact-email", "info@orjwanlaw.com", "البريد الإلكتروني"],
+                ["contact-web", "www.orjwanlaw.com", "الموقع الإلكتروني"],
+                ["contact-location", "مكة المكرمة - العوالي - شارع ابراهيم الجفالي الدور 2 مكتب 13", "العنوان والمقر"]
+            ];
+            const wsGeneral = XLSX.utils.aoa_to_sheet(generalData);
+            wsGeneral['!cols'] = [{wch: 20}, {wch: 70}, {wch: 35}];
+            XLSX.utils.book_append_sheet(wb, wsGeneral, "بيانات العرض الأساسية");
+
+            const tableData = [
+                ["البند القانوني", "نطاق العمل والتفاصيل", "قيمة الأتعاب"],
+                ["صياغة العقود", "صياغة عدد (3) عقود تجارية وتأسيسية ومراجعتها لضمان خلوها من الثغرات القانونية.", "15,000"],
+                ["الاستشارات القانونية", "باقة استشارات شهرية مفتوحة (شفهية وكتابية) لمدة 6 أشهر في قضايا العمل والشركات.", "30,000"],
+                ["التمثيل القضائي", "دراسة وتمثيل الشركة في الدعوى التجارية المقامة ضد المورد بمحكمة الدرجة الأولى.", "45,000"],
+                ["اللوائح العمالية", "إعداد واعتماد لائحة تنظيم العمل الداخلية وفقاً لمتطلبات وزارة الموارد البشرية.", "8,000"]
+            ];
+            const wsTable = XLSX.utils.aoa_to_sheet(tableData);
+            wsTable['!cols'] = [{wch: 25}, {wch: 80}, {wch: 15}];
+            XLSX.utils.book_append_sheet(wb, wsTable, "جدول الأتعاب");
+
+            XLSX.writeFile(wb, "OrjwanLaw_Proposal_Template.xlsx");
+        }
+
+        // 2. قراءة ملف الإكسيل
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    
+                    if (workbook.SheetNames.length > 0) {
+                        const sheet1Name = workbook.SheetNames[0];
+                        const sheet1Data = XLSX.utils.sheet_to_json(workbook.Sheets[sheet1Name], {header: 1});
+                        
+                        for (let i = 1; i < sheet1Data.length; i++) {
+                            const row = sheet1Data[i];
+                            if (row && row.length >= 2) {
+                                const id = row[0];
+                                const val = row[1];
+                                
+                                if (id && val !== undefined) {
+                                    const el = document.getElementById(id);
+                                    if (el) {
+                                        el.innerText = val;
+                                    }
+                                    if (id === "savings-val") {
+                                        const savingsBox = document.getElementById('savings-box');
+                                        if (savingsBox) {
+                                            savingsBox.innerHTML = `<i class="fa-solid fa-handshake text-2xl"></i><span>تم تطبيق خصم خاص للعميل بقيمة: ${val} ريال</span>`;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (workbook.SheetNames.length > 1) {
+                        const sheet2Name = workbook.SheetNames[1];
+                        const sheet2Data = XLSX.utils.sheet_to_json(workbook.Sheets[sheet2Name], { header: 1 });
+                        
+                        if (sheet2Data.length > 1) { 
+                            const tbody = document.getElementById('table-body');
+                            tbody.innerHTML = ''; 
+                            
+                            for (let i = 1; i < sheet2Data.length; i++) {
+                                const row = sheet2Data[i];
+                                if (row && row.length > 0) {
+                                    const title = row[0] || ""; 
+                                    const details = row[1] || ""; 
+                                    const price = row[2] || ""; 
+                                    
+                                    if(title || details || price) {
+                                        const tr = document.createElement('tr');
+                                        tr.innerHTML = `
+                                            <td class="font-bold text-white text-xl">${title}</td>
+                                            <td class="text-gray-300 leading-relaxed">${details}</td>
+                                            <td class="text-left font-bold text-gold-light text-3xl font-heading">${price}</td>
+                                        `;
+                                        tbody.appendChild(tr);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    alert("تم تحديث بيانات العرض وجدول الأتعاب بنجاح! يمكنك الآن طباعته كـ PDF.");
+                } catch (error) {
+                    console.error(error);
+                    alert("حدث خطأ أثناء قراءة الملف. يرجى التأكد من استخدام القالب الصحيح وعدم تغيير أسماء الأعمدة.");
+                }
+                
+                document.getElementById('fileInput').value = '';
+            };
+            reader.readAsArrayBuffer(file);
+        }
+    </script>
+
+</body>
+</html>
